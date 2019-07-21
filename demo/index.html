@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>D3Charts - Demo</title>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="../src/d3Charts.js"></script>
+	<script src="../src/d3Table.js"></script>
+
+</head>
+
+<body>
+        
+    <h4>Bar Chart Example</h4>
+    <div id="chart_amount_per_year"></div>
+
+    <h4>Line Chart Example</h4>
+    <div id="chart_performance_per_month"></div>
+ 
+    <script type="text/javascript">
+
+        let data1 = [
+            {"category":"2010","series":60},
+            {"category":"2011","series":27},
+            {"category":"2012","series":32},
+            {"category":"2013","series":50},
+            {"category":"2014","series":47},
+            {"category":"2015","series":54},
+            {"category":"2016","series":66},
+            {"category":"2017","series":96},
+            {"category":"2018","series":89},
+            {"category":"2019","series":79}
+            ]
+
+        let data2 = [
+            {"category":"January","series":{"revenue":71, "costs": 46}},
+            {"category":"February","series":{"revenue":65, "costs": 49}},
+            {"category":"March","series":{"revenue":54, "costs": 53}},
+            {"category":"April","series":{"revenue":42, "costs": 51}},
+            {"category":"May","series":{"revenue":39, "costs": 54}},
+            {"category":"June","series":{"revenue":43, "costs": 55}},
+            {"category":"July","series":{"revenue":51, "costs": 54}},
+            {"category":"August","series":{"revenue":48, "costs": 53}},
+            {"category":"September","series":{"revenue":56, "costs": 51}},
+            {"category":"November","series":{"revenue":76, "costs": 46}},
+            {"category":"December","series":{"revenue":88, "costs": 45}}
+            ]
+
+        let options1 = {
+            title: {label: 'Amount Per Year', size: 14, fontWeight: 'bold'},
+            xlabel: {label: 'Year', size: 12},
+            ylabel: {label: 'Amount', size: 12},
+            barlabel: {size:10, color:'#fff'},
+            width: 600,
+            height: 350,
+            margin: {top: 40, bottom: 80, left: 50, right: 40},
+            xaxis: {font: {size:10}, orientation: 'horizontal'},
+            yaxis: {font: {size:10}, min:0},
+            colors: ['#4BA6FF'],
+            padding: 0.1,
+            grid: true,
+            traceDiff: {size:10, color:'black'},
+            tooltip: {suffix:" h"},
+            animation: {duration: 500, delay: 20},
+            responsiveness: false
+        }
+
+        let options2 = {
+            title: {label: 'Title', size: 14, fontWeight: 'bold'},
+            ylabel: {label: 'revenue', size: 12, color: '#4BA6FF'},
+            y2label: {label: 'costs', size: 12, color: '#0bef41'},
+            width: 700,
+            height: 350,
+            margin: {top: 40, bottom: 60, left: 60, right: 150},
+            xaxis: {font: {size: 10}, orientation: 'skew'},
+            yaxis: {font: {size: 10}},
+            y2axis: {font: {size: 10}, serieIndex: [1]},
+            colors: ['#4BA6FF','#0bef41'],
+            grid: true,
+            tooltip: true,
+            circle: {radius: 4, display: true},
+            legend: {coord: {x: 600, y: 50}, font: {size: 12}},
+            responsiveness: false
+            }
+      
+
+        // draw charts
+        drawBarChart(div='chart_amount_per_year',data=data1, options=options1)
+        drawLineChart(div='chart_performance_per_month',data=data2, options=options2)
+
+
+    </script>
+
+</body>
+
+</html>
