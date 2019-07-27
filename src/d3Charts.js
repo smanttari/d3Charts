@@ -1,40 +1,8 @@
-function drawBarChart(div,dataset,opt){
+function drawBarChart(div,dataset,opt={}){
 
-    // data = [{"category":"Tammikuu","series":{"2010": 22, "2011": 29, "2012": 23},
-    //        {"category":"Helmikuu","series":{"2010": 25, "2011": 21, "2012": 25},
-    //        {"category":"Maaliskuu","series":{"2010": 32, "2011": 30, "2012": 25},
-    //        {"category":"Huhtikuu","series":{"2010": 28, "2011": 29, "2012": 30}]
-
-    // options = {
-    //     title: {label: 'Tunnit vuosittain', size: 14, fontWeight: 'normal'},
-    //     xlabel: {label: 'vuosi', size: 12, fontWeight: 'normal'},
-    //     ylabel: {label: 'tunnit', size: 12, color: '#4BA6FF', fontWeight: 'normal'},
-    //     barlabel: {size:10, color:'#fff'},
-    //     width: 700,
-    //     height: 400,
-    //     margin: {top: 60, bottom: 60, left: 60, right: 60},
-    //     colors: ['#4BA6FF'],
-    //     padding: 0.2,
-    //     grid: true,
-    //     xaxis: {font: {size: 16}, orientation: 'horizontal'},   // horizontal, vertical, skew
-    //     yaxis: {font: {size: 16}, min:0, max:100},
-    //     y2axis: {font: {size: 16}, , min:0, max:100, serieIndex: [1]},         // list of serie indexes that are supposed to use secondary yaxis
-    //     y2label: {label: 'km', size: 12, color: '#4BA6FF', fontWeight: 'normal'},
-    //     traceDiff: {size:10, color:'black'},
-    //     tooltip: {prefix:"", suffix:" h"},    // prefix + "y-value" + suffix
-    //     avgLine: {size:10, color: '#DC3545', prefix:"", suffix:" h"},
-    //     legend: { 
-    //          coord: {x: 0, y: 0},
-    //          rect: {size: 15, space: 5},
-    //          font: {size: 16}
-    //          },
-    //     animation: {duration: 500, delay: 10},
-    //     ticks: {count: 25},
-    //     responsiveness: true
-    //     }
-
-    // set defaults if variable is undefined
-    let options = opt || {}
+    // set default values
+    let options = opt 
+    let fontFamily = options.fontFamily || 'Helvetica'
     let title = options.title || {label:'', size:10, fontWeight: 'normal'}
     let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
     let ylabel = options.ylabel || {label:'', size:10, fontWeight: 'normal'}
@@ -44,7 +12,7 @@ function drawBarChart(div,dataset,opt){
     let xaxis = options.xaxis || {font: {size: 10}, orientation: 'horizontal'}
     let yaxis = options.yaxis || {font: {size: 10}}
     let colors = options.colors || d3.schemeCategory10 
-    let padding = options.padding || 0.2
+    let padding = options.padding || 0.1
     let barlabel = options.barlabel || false
     let traceDiff = options.traceDiff || false
     let tooltip = options.tooltip || false
@@ -66,6 +34,7 @@ function drawBarChart(div,dataset,opt){
     let svg = container.append('svg')
         .attr('width', width)
         .attr('height', height)
+        .style('font-family', fontFamily)
         
     // responsiveness
     if (responsiveness) {svg.call(responsivefy)}
@@ -447,37 +416,18 @@ function drawBarChart(div,dataset,opt){
 
 
 
-function drawPieChart(div,dataset,opt){
+function drawPieChart(div,dataset,opt={}){
 
-    // data = {"category":"HP","series":75.16},{"category":"HV","series":56.4},{"category":"J","series":38.33},{"category":"JK","series":5.41},{"category":"KP","series":14.97}
-
-    // options = {
-    //     title: {label: 'Tunnit vuosittain', size: 14, fontWeight: 'normal'},
-    //     width: 700,
-    //     height: 400,
-    //     margin: {top: 60, bottom: 60, left: 60, right: 60},
-    //     colors: ['#0875e0','#0e81f2','#1E90FF','#349BFF','#4BA6FF','#62B1FF'],
-    //     slicelabel: {size:10, color:'#fff', threshold: 0.10}},
-    //     tooltip: {prefix:"", suffix:" h"},    // prefix + "category" + "value" + suffix
-    //     radius: {inner: 20, outer: 100},
-    //     legend: { 
-    //          coord: {x: 0, y: 0},
-    //          rect: {size: 15, space: 5},
-    //          font: {size: 16}
-    //          },
-    //     maxSliceCount: 10, //maximum number of slices
-    //     responsiveness: true
-    //     }
-
-    // set defaults if variable is undefined
-    let options = opt || {}
+    // set default values
+    let options = opt
+    let fontFamily = options.fontFamily || 'Helvetica'
     let title = options.title || {label:'', size:10, fontWeight: 'normal'}
     let width = options.width || 500
     let height = options.height || 300
     let margin = options.margin || {top: 50, bottom: 50, left: 50, right: 50}
-    let colors = options.colors || ['#4ba6ff','#969efc','#c995ed','#ed8ed6','#ff8cba','#ff919d','#ff9c84','#ffab71']
+    let colors = options.colors || d3.schemeCategory10 
     let tooltip = options.tooltip || false
-    let slicelabel = options.slicelabel || false
+    let slicelabel = options.slicelabel || {size:10, color:'#fff', threshold: 0.10}
     let radius = options.radius || {inner: 0, outer: (height - margin.top - margin.bottom) / 2}
     let legend = options.legend || false
     let maxSliceCount = options.maxSliceCount || 20
@@ -492,6 +442,7 @@ function drawPieChart(div,dataset,opt){
     let svg = container.append('svg')
         .attr('width', width)
         .attr('height', height)
+        .style('font-family', fontFamily)
     
     // responsiveness
     if (responsiveness) {svg.call(responsivefy)}
@@ -590,7 +541,7 @@ function drawPieChart(div,dataset,opt){
             .attr('fill', slicelabel.color)
         slice.append("text")
             .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"})
-            .attr("dy", "1em")
+            .attr("dy", "1.2em")
             .text(d => { 
                 if (d.data.series / sumSeries > threshold) {return Math.round(d.data.series / sumSeries * 100) + ' %'}
             })
@@ -608,7 +559,7 @@ function drawPieChart(div,dataset,opt){
             if (d.startAngle < Math.PI) {return 'right'}
             else {return 'left'}
             })
-        .attr('title', d => tooltip.prefix + d.data.category + ': ' + d.data.series + tooltip.suffix)
+        .attr('title', d => (tooltip.prefix || '') + d.data.category + ': ' + d.data.series + (tooltip.suffix || ''))
     }
 
     // add title
@@ -630,37 +581,11 @@ function drawPieChart(div,dataset,opt){
 
 
 
-function drawLineChart(div,dataset,opt){
+function drawLineChart(div,dataset,opt={}){
 
-    // data = {"category":"2010","series":260.0},{"category":"2011","series":217.0},{"category":"2012","series":132.0},{"category":"2013","series":200.0}
-
-    // options = {
-    //     title: {label: 'Tunnit vuosittain', size: 14}, fontWeight: 'normal',
-    //     xlabel: {label: 'vuosi', size: 12, fontWeight: 'normal'},
-    //     ylabel: {label: 'tunnit', size: 12, color: '#4BA6FF', fontWeight: 'normal'},
-    //     width: 700,
-    //     height: 400,
-    //     margin: {top: 60, bottom: 60, left: 60, right: 60},
-    //     colors: ['#4BA6FF', '#DC3545', '#0bef41', '#56606b'],
-    //     line: {width: 2},
-    //     grid: true,
-    //     xaxis: {font: {size: 16}, orientation: 'horizontal'},   // horizontal, vertical, skew
-    //     yaxis: {font: {size: 16}, min:0, max:100},
-    //     y2axis: {font: {size: 16}, , min:0, max:100, serieIndex: [1]},         // list of serie indexes that are supposed to use secondary yaxis
-    //     y2label: {label: 'km', size: 12, color: '#4BA6FF', fontWeight: 'normal'},
-    //     tooltip: {prefix:"", suffix:" h"},    // prefix + "y-value" + suffix
-    //     circle: {radius: 5, display: true},
-    //     legend: { 
-    //          coord: {x: 0, y: 0},
-    //          rect: {size: 15, space: 5},
-    //          font: {size: 16}
-    //          },
-    //     ticks: {count: 25},
-    //     responsiveness: true
-    //     }
-
-    // set defaults if variable is undefined
-    let options = opt || {}
+    // set default values
+    let options = opt
+    let fontFamily = options.fontFamily || 'Helvetica'
     let title = options.title || {label:'', size:10, fontWeight: 'normal'}
     let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
     let ylabel = options.ylabel || {label:'', size:10, fontWeight: 'normal'}
@@ -689,6 +614,7 @@ function drawLineChart(div,dataset,opt){
     let svg = container.append('svg')
         .attr('width', width)
         .attr('height', height)
+        .style('font-family', fontFamily)
     
     // responsiveness
     if (responsiveness) {svg.call(responsivefy)}
@@ -964,13 +890,7 @@ function drawLineChart(div,dataset,opt){
 // Function for creating legend
 function addLegend(svg,labels,colorScale,options){
 
-    // options = {
-    //     coord: {x: 0, y: 0},
-    //     rect: {size: 15, space: 5},
-    //     font: {size: 12}
-    //     }
-
-    // set defaults if variable is undefined
+    // set default values
     let coord = options.coord || {x:0, y:0}
     let rect = options.rect || {size: 15, space: 5}
     let font = options.font || {size: 10}
