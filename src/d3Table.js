@@ -1,28 +1,31 @@
-function createTable(div,data,options){
+function createTable(div,data,opt={}){
 
-    // data = [{"2010":22.0,"2011":29.0,"2012":23.0,"2013":17.0,"2014":20.0},
-    //  {"2010":27.0,"2011":23.0,"2012":26.0,"2013":19.0,"2014":17.0},
-    //  {"2010":29.0,"2011":24.0,"2012":21.0,"2013":21.0,"2014":10.0}]
-    
-    // options = {
-    //  sort: true,
-    //  table: {class: 'table table-sm'},
-    //  thead: {class: 'thead-light'},
-    //  footer: {columns: {1: 'sum', 2: 'mean', 3: 'sum'}}
-    // }
-
+    let options = opt
+    let fontFamily = options.fontFamily || 'Helvetica'
+    let width = options.width || '100%'
+    let height = options.height || '100%'
     let sort = options.sort || false
-    let tableOptions = options.table || {class: 'table'}
-    let tbodyOptions = options.tbody || {class: ''}
-    let theadOptions = options.thead || {class: ''}
+    let border = options.border || false
+    let padding = options.padding || '5px'
+    let hover = options.hover || false
+    let font = options.font || {size: '14px'}
+    let textAlign = options.textAlign || 'center'
+    let header = options.header || {color:'#000', backgroudColor: '#e9ecef'}
     let footer = options.footer || false
 
     // add table
     let container = d3.select('#' + div)
     container.selectAll('table').remove()
-    let table = container.append('table').attr('class', tableOptions.class)
-    let tbody = table.append('tbody').attr('class', tbodyOptions.class)
-    let thead = table.append('thead').attr('class', theadOptions.class)
+    let table = container.append('table')
+        .attr('width', width)
+        .attr('height', height)
+        .style('font-family', fontFamily)
+        .style('font-size', font.size)
+        .style('border-collapse','collapse')
+    let tbody = table.append('tbody')
+    let thead = table.append('thead')
+        .style('color',header.color)
+        .style('background-color',header.backgroudColor)
 
     // check if we have some data
     if (!data || data.length == 0){
@@ -52,30 +55,32 @@ function createTable(div,data,options){
         .enter()
         .append('th')
         .text(d => d)
+        .style('padding', padding)
+        .style('text-align', textAlign)
 
     if (sort){
         headers.append('i')
             .attr('id','sort_up')
-            .attr('class','fas fa-long-arrow-alt-up ml-2')
-            .style('opacity','0.2')  
+            .text(' \u2191')
+            .style('opacity','0.3')  
         headers.append('i')
             .attr('id','sort_down')
-            .attr('class','fas fa-long-arrow-alt-down')
-            .style('opacity','0.2')
+            .text('\u2193')
+            .style('opacity','0.3')  
 
         headers.on('click', function (d) {
             if (this.className != 'ascending'){
                 rows.sort(function(a, b) {return d3.ascending(a[d],b[d])})
                 this.className = 'ascending'
-                headers.selectAll('#sort_up').style('opacity','0.2')
-                headers.selectAll('#sort_down').style('opacity','0.2')
-                d3.select(this).select('#sort_up').style('opacity','0.6')
+                headers.selectAll('#sort_up').style('opacity','0.3')
+                headers.selectAll('#sort_down').style('opacity','0.3')
+                d3.select(this).select('#sort_up').style('opacity','1')
             } else {
                 rows.sort(function(a, b) {return d3.descending(a[d],b[d])})
                 this.className = 'descending'
-                headers.selectAll('#sort_up').style('opacity','0.2')
-                headers.selectAll('#sort_down').style('opacity','0.2')
-                d3.select(this).select('#sort_down').style('opacity','0.6')
+                headers.selectAll('#sort_up').style('opacity','0.3')
+                headers.selectAll('#sort_down').style('opacity','0.3')
+                d3.select(this).select('#sort_down').style('opacity','1')
             }
         })
 
@@ -94,6 +99,15 @@ function createTable(div,data,options){
         .enter()
         .append('tr')
 
+    if (hover){
+        rows.on('mouseover', function(d){
+            d3.select(this).style('background-color', '#f5f5f5')
+        })
+        rows.on('mouseout', function(d){
+            d3.select(this).style('background-color', '#fff')
+        })
+    }
+
     // add cells
     rows.selectAll('td')
         .data(function (d) {
@@ -104,6 +118,8 @@ function createTable(div,data,options){
         .enter()
         .append('td')
         .text(function (d) { return d.value})
+        .style('padding', padding)
+        .style('text-align', textAlign)
 
     // add footer
     if (footer){
@@ -130,7 +146,7 @@ function createTable(div,data,options){
             }
         }
 
-        let tfoot = table.append('tfoot').attr('class', theadOptions.class)
+        let tfoot = table.append('tfoot')
         tfoot.append('tr')
         tfoot.select('tr')
             .selectAll('th')
@@ -138,5 +154,15 @@ function createTable(div,data,options){
             .enter()
             .append('th')
             .text(d => d)
+            .style('padding', padding)
+            .style('text-align', textAlign)
+            .style('color', footer.color)
+            .style('background-color', footer.backgroudColor)
+    }
+
+    if (border){
+        table.style('border','solid 1px #dee2e6')
+        table.selectAll('th').style('border','solid 1px #dee2e6').style('border-collapse','collapse')
+        table.selectAll('td').style('border','solid 1px #dee2e6').style('border-collapse','collapse')
     }
 }
