@@ -1,9 +1,15 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 
-	<title>D3Charts - Demo</title>
+    <title>D3Charts & Tables - Demo</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> 
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
 	<script src="../src/d3Charts.js"></script>
@@ -12,12 +18,23 @@
 </head>
 
 <body>
-        
-    <h4>Bar Chart Example</h4>
-    <div id="chart_amount_per_year"></div>
 
-    <h4>Line Chart Example</h4>
-    <div id="chart_performance_per_month"></div>
+    <div class="col-lg-6" style="margin: 10px">
+
+        <h4>Bar Chart Example</h4>
+        <div id="chart_amount_per_year"></div>
+
+        <h4>Line Chart Example</h4>
+        <div id="chart_performance_per_month"></div>
+
+        <h4>Pie Chart Example</h4>
+        <div id="chart_fruits"></div>
+
+        <h4>Table Example</h4>
+        <div id="table"></div>
+
+    </div>
+
  
     <script type="text/javascript">
 
@@ -39,41 +56,57 @@
             {"category":"February","series":{"revenue":65, "costs": 49}},
             {"category":"March","series":{"revenue":54, "costs": 53}},
             {"category":"April","series":{"revenue":42, "costs": 51}},
-            {"category":"May","series":{"revenue":39, "costs": 54}},
-            {"category":"June","series":{"revenue":43, "costs": 55}},
+            {"category":"May","series":{"revenue":40, "costs": 54}},
+            {"category":"June","series":{"revenue":43, "costs": 55.6}},
             {"category":"July","series":{"revenue":51, "costs": 54}},
             {"category":"August","series":{"revenue":48, "costs": 53}},
             {"category":"September","series":{"revenue":56, "costs": 51}},
-            {"category":"November","series":{"revenue":76, "costs": 46}},
-            {"category":"December","series":{"revenue":88, "costs": 45}}
+            {"category":"November","series":{"revenue":76, "costs": 47}},
+            {"category":"December","series":{"revenue":88, "costs": 46}}
+            ]
+
+        let data3 = [
+            {"category":"Apple","series":75},
+            {"category":"Banana","series":56},
+            {"category":"Orange","series":38},
+            {"category":"Lemon","series":5},
+            {"category":"Kiwi","series":14}
+        ]
+
+        let data4 = [
+            {"Year":2017,"A":29.0,"B":23.0,"C":17.0,"D":20.0},
+            {"Year":2018,"A":23.0,"B":26.0,"C":19.0,"D":17.0},
+            {"Year":2019,"A":24.0,"B":21.0,"C":21.0,"D":10.0}
             ]
 
         let options1 = {
+            fontFamily: 'Helvetica',
             title: {label: 'Amount Per Year', size: 14, fontWeight: 'bold'},
             xlabel: {label: 'Year', size: 12},
             ylabel: {label: 'Amount', size: 12},
             barlabel: {size:10, color:'#fff'},
             width: 600,
             height: 350,
-            margin: {top: 40, bottom: 80, left: 50, right: 40},
+            margin: {top: 40, bottom: 100, left: 50, right: 150},
             xaxis: {font: {size:10}, orientation: 'horizontal'},
             yaxis: {font: {size:10}, min:0},
             colors: ['#4BA6FF'],
             padding: 0.1,
             grid: true,
             traceDiff: {size:10, color:'black'},
-            tooltip: {suffix:" h"},
+            tooltip: {suffix:" CNT"},
             animation: {duration: 500, delay: 20},
-            responsiveness: false
+            responsiveness: true
         }
 
         let options2 = {
+            fontFamily: 'Helvetica',
             title: {label: 'Title', size: 14, fontWeight: 'bold'},
-            ylabel: {label: 'revenue', size: 12, color: '#4BA6FF'},
-            y2label: {label: 'costs', size: 12, color: '#0bef41'},
+            ylabel: {label: 'revenue', size: 12},
+            y2label: {label: 'costs', size: 12},
             width: 700,
-            height: 350,
-            margin: {top: 40, bottom: 60, left: 60, right: 150},
+            height: 400,
+            margin: {top: 40, bottom: 100, left: 60, right: 150},
             xaxis: {font: {size: 10}, orientation: 'skew'},
             yaxis: {font: {size: 10}},
             y2axis: {font: {size: 10}, serieIndex: [1]},
@@ -81,14 +114,44 @@
             grid: true,
             tooltip: true,
             circle: {radius: 4, display: true},
-            legend: {coord: {x: 600, y: 50}, font: {size: 12}},
-            responsiveness: false
+            legend: {coord: {x: 620, y: 50}, font: {size: 12}},
+            responsiveness: true
+            }
+
+        let options3 = {
+            fontFamily: 'Helvetica',
+            title: {label: 'Fruits', size: 14, fontWeight: 'bold'},
+            width: 600,
+            height: 350,
+            margin: {top: 40, bottom: 50, left: 40, right: 100},
+            tooltip: true,
+            radius: {inner: 30, outer: 120},
+            slicelabel: {size:12, color: '#FFF', threshold: 0.07},
+            legend: {coord: {x: 510, y: 70}, font: {size: 12}},
+            maxSliceCount: 8,
+            responsiveness: true
             }
       
+        let options4 = {
+            fontFamily: 'Helvetica',
+            width: 500,
+            border: true,
+            padding: '6px',
+            hover: true,
+            font: {size: '16px'},
+            textAlign: 'left',
+            sort: true,
+            header: {color:'#000', backgroudColor: '#e9ecef'},
+            footer: {color:'#000', backgroudColor:'#e9ecef', columns: {1: 'sum', 2: 'sum', 3:'sum', 4:'sum'}}
+        }
 
         // draw charts
-        drawBarChart(div='chart_amount_per_year',data=data1, options=options1)
-        drawLineChart(div='chart_performance_per_month',data=data2, options=options2)
+        drawBarChart(div='chart_amount_per_year', data=data1, options=options1)
+        drawLineChart(div='chart_performance_per_month', data=data2, options=options2)
+        drawPieChart(div='chart_fruits', data=data3, options=options3)
+
+        // create table
+        createTable(div='table', data=data4, options=options4)
 
 
     </script>
