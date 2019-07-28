@@ -55,33 +55,34 @@ List of all possible parameters that can be defined
 
 | Parameter | Description | Example | Default | Applies to |
 | ------- | -------- | -------- | -------- | -------- |
+| animation | Animation settings | `{duration: 500, delay: 20}` | `false` | BarChart |
+| avgLine | Show average line with options | `{size:10, color: '#DC3545', prefix: "ka ", suffix:"h"}` | `false` | BarChart |
+| barlabel | Options for bar labels | `{size:10, color:'#fff'}` | `false` | BarChart |
+| circle | Show/Hide circles in line |  | `{radius: 4, display: false}` | LineChart |
+| colors | List of colors for each serie | `['#4BA6FF','#0bef41']` | [d3.schemeCategory10](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeCategory10) | All |
 | fontFamily | Font style |  | `Helvetica` | All |
-| title | Main title of the chart |  | - | All |
-| width | Width of the element |  | `500` | All |
+| grid | Show/Hide grid | `true/false` | `false` | BarChart, LineChart |
 | height | Height of the element |  | `300` | All |
+| legend | Show legend with options | `{coord: {x: 620, y: 50}, rect: {size: 10, space: 5}, font: {size: 12}}` | `false` | All |
+| line | Options for line |  | `{width: 2}` | LineChart |
 | margin | Dict of marginals |  | `{top: 50, bottom: 50, left: 50, right: 50}` | All |
+| maxSliceCount | Maximum number of slices |  | `20` | PieChart |
+| padding | Padding between bars |  | `0.1` | BarChart |
+| radius | Pie chart radius | `{inner: 20, outer: 100` | `{inner: 0, outer: (height - margin.top - margin.bottom) / 2}` | PieChart |
 | responsiveness | Boolean for applying responsive behaviour | `true/false`  | `false` | All |
-| xlabel | X-axis label options | `{label:'Year', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
-| ylabel | Y-axis label options | `{label:'Amount', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
-| y2label | Secondary Y-axis label options | `{label:'Costs', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
+| slicelabel | Show/Hide slice labels | `true/false` | `{size:10, color:'#fff', threshold: 0.10}`| PieChart |
+| ticks | Number of x-axis ticks | `ticks: {count:5}` | Data length | BarChart, LineChart |
+| title | Main title of the chart |  | - | All |
+| tooltip | Show tooltips. Requires Bootstrap. | `true/false` | `false` | All |
+| traceDiff | Possibility to track percent differences between bars | `{size:10, color:'black'}` | `false` | BarChart |
+| width | Width of the element |  | `500` | All |
 | xaxis | X-axis options | `{font: {size: 12}, orientation: 'vertical/skew/horizontal'}` | `{font: {size: 10}, orientation: 'horizontal'}` | BarChart, LineChart |
+| xlabel | X-axis label options | `{label:'Year', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
 | yaxis | Y-axis options |  | `{font: {size: 10}, min:10, max:200}` | BarChart, LineChart |
 | y2axis | Secondary Y-axis options. serieIndex list the serie indexes that applies to secondary axis | `{serieIndex:[1,2] , font: {size: 10}, min:10, max:200}` | `false` | BarChart, LineChart |
-| colors | List of colors for each serie | `['#4BA6FF','#0bef41']` | [d3.schemeCategory10](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeCategory10) | All |
-| padding | Padding between bars |  | `0.1` | BarChart |
-| barlabel | Options for bar labels | `{size:10, color:'#fff'}` | `false` | BarChart |
-| traceDiff | Possibility to track percent differences between bars | `{size:10, color:'black'}` | `false` | BarChart |
-| tooltip | Show tooltips. Requires Bootstrap. | `true/false` | `false` | All |
-| avgLine | Show average line with options | `{size:10, color: '#DC3545', prefix: "ka ", suffix:"h"}` | `false` | BarChart |
-| legend | Show legend with options | `{coord: {x: 620, y: 50}, rect: {size: 10, space: 5}, font: {size: 12}}` | `false` | All |
-| grid | Show/Hide grid | `true/false` | `false` | BarChart, LineChart |
-| ticks | Number of x-axis ticks | `ticks: {count:5}` | Data length | BarChart, LineChart |
-| animation | Animation settings | `{duration: 500, delay: 20}` | `false` | BarChart |
-| slicelabel | Show/Hide slice labels | `true/false` | `{size:10, color:'#fff', threshold: 0.10}`| PieChart |
-| radius | Pie chart radius | `{inner: 20, outer: 100` | `{inner: 0, outer: (height - margin.top - margin.bottom) / 2}` | PieChart |
-| maxSliceCount | Maximum number of slices |  | `20` | PieChart |
-| line | Options for line |  | `{width: 2}` | LineChart |
-| circle | Show/Hide circles in line |  | `{radius: 4, display: false}` | LineChart |
+| ylabel | Y-axis label options | `{label:'Amount', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
+| y2label | Secondary Y-axis label options | `{label:'Costs', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
+
 
 ## Examples
 
@@ -91,7 +92,7 @@ List of all possible parameters that can be defined
 
 ### Line Chart
 
-![LineChart](./img/LineChart.png)
+![LineChart](./img/LineChart.PNG)
 
 ### Pie Chart
 
@@ -127,18 +128,17 @@ List of all possible parameters that can be defined
 
 | Parameter | Description | Example | Default | 
 | ------- | -------- | -------- | -------- |
-| fontFamily | Font style |  | `Helvetica` |
-| width | Width of the element | `500` | `100%` | 
-| height | Height of the element | `200` | `100%` |
-| sort | Enable/Disable sorting | `true/false` | `false` |
 | border | Show/Hide sorting | `true/false` | `false` |
-| padding | Padding for cells | `10px` | `5px` |
-| hover | Hover rows on mouseover | `true/false` | `false` |
-| font | Font options | `{size: '12px'}` | `{size: '14px'}` |
-| textAlign | Text alignment  | `center/left/right` | `center` |
-| header | Options for header row | `{color:'#000', backgroudColor: '#e9ecef'}` | `{color:'#000', backgroudColor: '#e9ecef'}` |
+| font | Font options | `{size: '12px'}` | `{size: '14px', fontFamily:'Helvetica'}` |
 | footer | Footer options and aggregation functions applied | ` {color:'#000', backgroudColor:'#e9ecef', columns: {1: 'mean', 2: 'mean', 3:'sum', 4:'sum'}}` | `false` |
+| header | Options for header row | `{color:'#000', backgroudColor: '#e9ecef'}` | `{color:'#000', backgroudColor: '#e9ecef'}` |
+| height | Height of the element | `200` | `100%` |
+| hover | Hover rows on mouseover | `true/false` | `false` |
+| padding | Padding for cells | `10px` | `5px` |
+| sort | Enable/Disable sorting | `true/false` | `false` |
+| textAlign | Text alignment  | `center/left/right` | `center` |
+| width | Width of the element | `500` | `100%` | 
 
 ### Example
 
-![Table](./img/Table.png)
+![Table](./img/Table.PNG)
