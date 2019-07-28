@@ -1,14 +1,13 @@
 function createTable(div,data,opt={}){
 
     let options = opt
-    let fontFamily = options.fontFamily || 'Helvetica'
     let width = options.width || '100%'
     let height = options.height || '100%'
     let sort = options.sort || false
     let border = options.border || false
     let padding = options.padding || '5px'
     let hover = options.hover || false
-    let font = options.font || {size: '14px'}
+    let font = options.font || {size: '14px', fontFamily: 'Helvetica'}
     let textAlign = options.textAlign || 'center'
     let header = options.header || {color:'#000', backgroudColor: '#e9ecef'}
     let footer = options.footer || false
@@ -19,7 +18,7 @@ function createTable(div,data,opt={}){
     let table = container.append('table')
         .attr('width', width)
         .attr('height', height)
-        .style('font-family', fontFamily)
+        .style('font-family', font.fontFamily)
         .style('font-size', font.size)
         .style('border-collapse','collapse')
     let tbody = table.append('tbody')
