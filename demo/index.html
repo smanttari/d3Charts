@@ -93,7 +93,7 @@
             colors: ['#4BA6FF'],
             padding: 0.1,
             grid: true,
-            traceDiff: {size:10, color:'black'},
+            traceDiff: {size:9, color:'black'},
             tooltip: {suffix:" CNT"},
             animation: {duration: 500, delay: 20},
             responsiveness: true
@@ -146,12 +146,12 @@
         }
 
         // draw charts
-        drawBarChart(div='chart_amount_per_year', data=data1, options=options1)
-        drawLineChart(div='chart_performance_per_month', data=data2, options=options2)
-        drawPieChart(div='chart_fruits', data=data3, options=options3)
+        drawBarChart(div='chart_amount_per_year', dataset=data1, opt=options1)
+        drawLineChart(div='chart_performance_per_month', dataset=data2, opt=options2)
+        drawPieChart(div='chart_fruits', dataset=data3, opt=options3)
 
         // create table
-        createTable(div='table', data=data4, options=options4)
+        createTable(div='table', data=data4, opt=options4)
 
 
     </script>
