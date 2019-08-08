@@ -1,6 +1,6 @@
-function createTable(div,data,opt={}){
+function createTable(div,data,opt){
 
-    let options = opt
+    let options = opt || {}
     let width = options.width || '100%'
     let height = options.height || '100%'
     let sort = options.sort || false

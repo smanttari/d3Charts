@@ -1,7 +1,7 @@
-function drawBarChart(div,dataset,opt={}){
+function drawBarChart(div,dataset,opt){
 
     // set default values
-    let options = opt 
+    let options = opt || {} 
     let fontFamily = options.fontFamily || 'Helvetica'
     let title = options.title || {label:'', size:10, fontWeight: 'normal'}
     let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
@@ -125,7 +125,7 @@ function drawBarChart(div,dataset,opt={}){
 
     // enable bootstrap tooltip
     try {$(function () {$('[data-toggle="tooltip"]').tooltip()})}
-    catch {}
+    catch(err) {}
 
     // create scales
     let categoryScale = d3.scaleBand()
@@ -416,10 +416,10 @@ function drawBarChart(div,dataset,opt={}){
 
 
 
-function drawPieChart(div,dataset,opt={}){
+function drawPieChart(div,dataset,opt){
 
     // set default values
-    let options = opt
+    let options = opt || {}
     let fontFamily = options.fontFamily || 'Helvetica'
     let title = options.title || {label:'', size:10, fontWeight: 'normal'}
     let width = options.width || 500
@@ -471,7 +471,7 @@ function drawPieChart(div,dataset,opt={}){
 
     // enable bootstrap tooltip
     try {$(function () {$('[data-toggle="tooltip"]').tooltip()})}
-    catch {}
+    catch(err) {}
     
     // sort data by value
     data = data.sort((a, b) => {return d3.descending(a.series, b.series)})
@@ -581,10 +581,10 @@ function drawPieChart(div,dataset,opt={}){
 
 
 
-function drawLineChart(div,dataset,opt={}){
+function drawLineChart(div,dataset,opt){
 
     // set default values
-    let options = opt
+    let options = opt || {}
     let fontFamily = options.fontFamily || 'Helvetica'
     let title = options.title || {label:'', size:10, fontWeight: 'normal'}
     let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
@@ -705,7 +705,7 @@ function drawLineChart(div,dataset,opt={}){
    
     // enable bootstrap tooltip
     try {$(function () {$('[data-toggle="tooltip"]').tooltip()})}
-    catch {}
+    catch(err) {}
 
     // create scales
     let xScale = d3.scalePoint()
