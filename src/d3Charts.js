@@ -1,30 +1,34 @@
-function drawBarChart(div,dataset,opt){
+function drawComboChart(div,dataset,opt){
 
     // set default values
     let options = opt || {} 
-    let fontFamily = options.fontFamily || 'Helvetica'
-    let title = options.title || {label:'', size:10, fontWeight: 'normal'}
-    let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
-    let ylabel = options.ylabel || {label:'', size:10, fontWeight: 'normal'}
-    let width = options.width || 500
-    let height = options.height || 300
-    let margin = options.margin || {top: 50, bottom: 50, left: 50, right: 50}
-    let xaxis = options.xaxis || {font: {size: 10}, orientation: 'horizontal'}
-    let yaxis = options.yaxis || {font: {size: 10}}
-    let colors = options.colors || d3.schemeCategory10 
-    let padding = options.padding || 0.1
-    let barlabel = options.barlabel || false
-    let traceDiff = options.traceDiff || false
-    let tooltip = options.tooltip || false
-    let avgLine = options.avgLine || false
-    let legend = options.legend || false
-    let grid = options.grid || false 
     let animation = options.animation || false
+    let avgLine = options.avgLine || false
+    let barlabel = options.barlabel || false
+    let circle = options.circle || {radius: 4, display: false}
+    let colors = options.colors || d3.schemeCategory10 
+    let fontFamily = options.fontFamily || 'Helvetica'
+    let grid = options.grid || false 
+    let height = options.height || 300
+    let legend = options.legend || false
+    let line = options.line || {width: 2}
+    let margin = options.margin || {top: 50, bottom: 50, left: 50, right: 50}
+    let padding = options.padding || 0.1
+    let responsiveness = options.responsiveness || false
+    let serietype = options.serietype || false
     let ticks = options.ticks || {count: (dataset) ? dataset.length : 0}
+    let title = options.title || {label:'', size:10, fontWeight: 'normal'}
+    let tooltip = options.tooltip || false
+    let traceDiff = options.traceDiff || false
+    let type = options.type || 'bar'
+    let width = options.width || 500
+    let xaxis = options.xaxis || {font: {size: 10}, orientation: 'horizontal'}
+    let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
+    let yaxis = options.yaxis || {font: {size: 10}}
+    let ylabel = options.ylabel || {label:'', size:10, fontWeight: 'normal'}
     let y2axis = options.y2axis || false
     let y2label = options.y2label || {label:'', size:10, fontWeight: 'normal'}
-    let responsiveness = options.responsiveness || false
-
+    
     let bordercolor = '#a8adb5'
     let borderwidth = 3
 
@@ -87,6 +91,15 @@ function drawBarChart(div,dataset,opt){
         })
         values = values.concat(Object.values(element.series))
     })
+    let types = {}
+    for (let i=0; i<series.length; i++){
+        if (serietype && Object.keys(serietype).includes(String(i))){
+            types[series[i]] = serietype[i]
+        }
+        else {
+            types[series[i]] = type
+        }
+    }
 
     let series1 = series.slice(0)
     let values1 = values.slice(0)
@@ -135,7 +148,7 @@ function drawBarChart(div,dataset,opt){
 
     let seriesScale = d3.scaleBand()
         .range([0, categoryScale.bandwidth()])
-        .domain(series) 
+        .domain(series.filter(d => types[d] == 'bar')) 
         .padding(padding)
 
     let yaxisMin = yaxis.min
@@ -198,7 +211,6 @@ function drawBarChart(div,dataset,opt){
     }
 
     // create X-axis
-
     // get tick values based on number of ticks provided as parameter
     let categoryCount = data.length
     let gap = Math.round(categoryCount / Math.min(ticks.count,data.length))
@@ -232,85 +244,52 @@ function drawBarChart(div,dataset,opt){
             .attr('dy', '-0.2em')
             .attr('transform', 'rotate(-45)')
     }
-
-    // create bars
-    series1.forEach(serie => {
+    
+    // add bars
+    series1.filter(d => types[d] == 'bar').forEach(serie => {
         addBars(serie,y1Scale,yaxisMin)
         addBarlabels(serie,y1Scale)
-        if (tooltip) { addTooltips(serie) }
+        if (tooltip){
+            addTooltips(serie)
+        }
+    })
+    series2.filter(d => types[d] == 'bar').forEach(serie => {
+        addBars(serie,y2Scale,y2axisMin)
+        addBarlabels(serie,y2Scale)
+        if (tooltip){
+            addTooltips(serie)
+        }
     })
 
-    if (series2.length > 0){
-        series2.forEach(serie => {
-            addBars(serie,y2Scale,y2axisMin)
-            addBarlabels(serie,y2Scale)
-            if (tooltip) { addTooltips(serie) }
-        })
-    }
-
-    function addBars(serie,yScale,yaxisMin){
-        let bars = svg.append('g')
-            .attr('class', 'bars_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
-            .selectAll('rect')
-            .data(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''})) 
-
-        bars.enter().append('rect')
-            .attr('x', d => categoryScale(d.category) + seriesScale(serie))
-            .attr('y', d => {return animation ? yScale(yaxisMin) : yScale(d.series[serie])})
-            .attr('width', seriesScale.bandwidth()) 
-            .attr('height', d => {return animation ? 0 : yScale(yaxisMin) - yScale(d.series[serie])})
-            .attr('fill', colorScale(serie))
-            .attr('category', d => d.category)
-            .attr('serie', serie)
-            .attr('value', d => d.series[serie])
-
-        if (animation) { 
-            svg.selectAll('.bars_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))	
-                .selectAll('rect')
-                .transition()
-                    .delay(function (d, i) { return i * (animation.delay || 10) })
-                    .duration((animation.duration || 500))
-                    .attr('y', d => yScale(d.series[serie]))
-                    .attr('height', d => yScale(yaxisMin) - yScale(d.series[serie]))
+    // add lines
+    series1.filter(d => types[d] == 'line').forEach(serie => {
+        addLine(serie,y1Scale)
+        addCircle(serie,y1Scale)
+        if (tooltip){
+            addTooltips(serie)
         }
-    }
-
-
-    function addBarlabels(serie,yScale){
-        svg.append('g')
-            .attr('class','barlabels_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
-            .selectAll('.barlabel')  		
-            .data(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''}))
-            .enter()
-            .append('text')
-            .attr('class','barlabel')
-            .attr('x', d => categoryScale(d.category) + seriesScale(serie) + seriesScale.bandwidth() / 2 )
-            .attr('y', d => yScale(d.series[serie]))
-            .attr('dy', '2em')
-            .attr('text-anchor', 'middle')
-            .text(d => {return (!barlabel || d.series[serie] == 0) ? '' : d.series[serie]})
-            .style('font-size', barlabel.size)
-            .style('fill', barlabel.color)
-            .style('opacity', animation ? '0' : '1')
-
-        if (animation) {
-            svg.selectAll('.barlabel')
-                .transition()
-                    .delay(function (d, i) { return i * (animation.delay * 1.5 || 20)})
-                    .duration(animation.duration  * 1.5 || 1000)
-                    .style('opacity', '1')
+    })
+    series2.filter(d => types[d] == 'line').forEach(serie => {
+        addLine(serie,y2Scale)
+        addCircle(serie,y2Scale)
+        if (tooltip){
+            addTooltips(serie)
         }
+    })
+
+    // add titles
+    addTitles(svg,width,height,centerX,centerY,margin,title,xlabel,ylabel,y2label)
+
+    // add legend
+    if (legend){
+        addLegend(svg,series,colorScale,legend)
     }
 
-
-    function addTooltips(serie){
-        svg.selectAll('.bars_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))	
-            .selectAll('rect')	
-            .attr('data-toggle','tooltip')
-            .attr('data-placement','top')
-            .attr('title', d => (tooltip.prefix || '') + (seriesHeaders ? serie + ': ' : '') + d.series[serie] + (tooltip.suffix || ''))
+    // add average-line
+    if (avgLine){ 
+        addAvgLine(values1,y1Scale)
+        if (y2axis){addAvgLine(values2,y2Scale)} 
     }
-
 
     // add mouseenter and mouseleave actions to bars
     svg.selectAll('rect')
@@ -355,21 +334,117 @@ function drawBarChart(div,dataset,opt){
                     .style('font-size', barlabel.size)
                     .style('fill', barlabel.color)
             })
-        })
+    })
 
-    // add titles
-    addTitles(svg,width,height,centerX,centerY,margin,title,xlabel,ylabel,y2label)
 
-    // add legend
-    if (legend){
-        addLegend(svg,series,colorScale,legend)
+    function addBars(serie,yScale,yaxisMin){
+        let bars = svg.append('g')
+            .attr('class', 'bars_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
+            .selectAll('rect')
+            .data(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''})) 
+
+        bars.enter().append('rect')
+            .attr('x', d => categoryScale(d.category) + seriesScale(serie))
+            .attr('y', d => {return animation ? yScale(yaxisMin) : yScale(d.series[serie])})
+            .attr('width', seriesScale.bandwidth()) 
+            .attr('height', d => {return animation ? 0 : yScale(yaxisMin) - yScale(d.series[serie])})
+            .attr('fill', colorScale(serie))
+            .attr('category', d => d.category)
+            .attr('serie', serie)
+            .attr('value', d => d.series[serie])
+
+        if (animation) { 
+            svg.selectAll('.bars_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))	
+                .selectAll('rect')
+                .transition()
+                    .delay(function (d, i) { return i * (animation.delay || 10) })
+                    .duration((animation.duration || 500))
+                    .attr('y', d => yScale(d.series[serie]))
+                    .attr('height', d => yScale(yaxisMin) - yScale(d.series[serie]))
+        }
     }
 
-    // add average-line
-    if (avgLine){ 
-        addAvgLine(values1,y1Scale)
-        if (y2axis){addAvgLine(values2,y2Scale)} 
+    function addBarlabels(serie,yScale){
+        svg.append('g')
+            .attr('class','barlabels_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
+            .selectAll('.barlabel')  		
+            .data(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''}))
+            .enter()
+            .append('text')
+            .attr('class','barlabel')
+            .attr('x', d => categoryScale(d.category) + seriesScale(serie) + seriesScale.bandwidth() / 2 )
+            .attr('y', d => yScale(d.series[serie]))
+            .attr('dy', '2em')
+            .attr('text-anchor', 'middle')
+            .text(d => {return (!barlabel || d.series[serie] == 0) ? '' : d.series[serie]})
+            .style('font-size', barlabel.size)
+            .style('fill', barlabel.color)
+            .style('opacity', animation ? '0' : '1')
+
+        if (animation) {
+            svg.selectAll('.barlabel')
+                .transition()
+                    .delay(function (d, i) { return i * (animation.delay * 1.5 || 20)})
+                    .duration(animation.duration  * 1.5 || 1000)
+                    .style('opacity', '1')
+        }
     }
+
+    function addLine(serie,yScale){
+        let valueline = d3.line()
+            .x(d => categoryScale(d.category) + categoryScale.bandwidth() / 2)
+            .y(d => yScale(d.series[serie]))
+
+        svg.append('g')
+            .attr('class', 'line_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
+            .append("path")
+            .datum(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''}))
+            .attr("d", valueline)
+            .attr('fill', 'none')
+            .style('stroke', colorScale(serie))
+            .style('stroke-width', line.width)
+    }
+
+    function addCircle(serie,yScale){
+        svg.append('g')
+            .attr('class', 'dots_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
+            .selectAll('.dot')
+            .data(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''}))
+            .enter()
+            .append('circle') 
+            .attr('class', 'dot')
+            .attr('cx', d => categoryScale(d.category) + categoryScale.bandwidth() / 2)
+            .attr('cy', d => yScale(d.series[serie]))
+            .attr('r', circle.radius)
+            .style('fill', colorScale(serie))
+            .style('fill-opacity', circle.display ? '1' : '0')
+            .on('mouseenter', function() { 
+                if (!circle.display){
+                    d3.select(this).style('fill-opacity', 1)
+                }
+                d3.select(this).style('stroke', bordercolor)
+                d3.select(this).style('stroke-width', borderwidth)
+            })
+            .on('mouseleave', function() { 
+                if (!circle.display){
+                    d3.select(this).style('fill-opacity', 0)
+                }
+                d3.select(this).style('stroke', 'none')
+            })
+    }
+
+    function addTooltips(serie){
+        if (types[serie] == 'bar'){
+            var elements = svg.selectAll('.bars_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_')).selectAll('rect')	
+        }
+        else if (types[serie] == 'line'){
+            var elements = svg.selectAll('.dots_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_')).selectAll('.dot')	
+        }
+        elements.attr('data-toggle','tooltip')
+            .attr('data-placement','top')
+            .attr('title', d => (tooltip.prefix || '') + (seriesHeaders ? serie + ': ' : '') + d.series[serie] + (tooltip.suffix || ''))
+
+        }
 
 
     function addAvgLine(values,yScale){
@@ -407,12 +482,9 @@ function drawBarChart(div,dataset,opt){
                 .transition()
                 .duration(animation.duration * 2|| 1000)
                 .style('opacity', '1')
-
         }
     }
-
-} 
-
+}
 
 
 
@@ -578,313 +650,6 @@ function drawPieChart(div,dataset,opt){
    }
 
 }
-
-
-
-function drawLineChart(div,dataset,opt){
-
-    // set default values
-    let options = opt || {}
-    let fontFamily = options.fontFamily || 'Helvetica'
-    let title = options.title || {label:'', size:10, fontWeight: 'normal'}
-    let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
-    let ylabel = options.ylabel || {label:'', size:10, fontWeight: 'normal'}
-    let width = options.width || 500
-    let height = options.height || 300
-    let margin = options.margin || {top: 50, bottom: 50, left: 50, right: 50}
-    let line = options.line || {width: 2}
-    let tooltip = options.tooltip || false
-    let xaxis = options.xaxis || {font: {size: 10}, orientation: 'horizontal'}
-    let yaxis = options.yaxis || {font: {size: 10}}
-    let circle = options.circle || {radius: 4, display: false}
-    let colors = options.colors || d3.schemeCategory10 
-    let legend = options.legend || false
-    let grid = options.grid || false 
-    let ticks = options.ticks || {count: (dataset) ? dataset.length : 0}
-    let y2axis = options.y2axis || false
-    let y2label = options.y2label || {label:'', size:10, fontWeight: 'normal'}
-    let responsiveness = options.responsiveness || false
-
-    let bordercolor = '#a8adb5'
-    let borderwidth = 3
-
-    // append svg
-    let container = d3.select('#' + div)
-    container.selectAll('svg').remove()
-    let svg = container.append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .style('font-family', fontFamily)
-    
-    // responsiveness
-    if (responsiveness) {svg.call(responsivefy)}
-
-    // calculate centerpoint
-    let centerX = margin.left + (width - margin.right - margin.left) / 2
-    let centerY = margin.top + (height - margin.top - margin.bottom) / 2
-
-    // check if we have some data
-    if (!dataset || dataset.length == 0){
-        svg.append('text')
-            .attr('x', centerX)
-            .attr('y', margin.top)
-            .attr('text-anchor','middle')
-            .text('No data')
-            .style('font-size',12)
-            .style('font-style','italic')
-            .attr('fill','#dc3545')
-        return
-    }
-
-    // copy of original dataset
-    let data = JSON.parse(JSON.stringify(dataset)) 
-
-    // add artificial headers to series if not provided in data
-    let seriesHeaders = data[0]['series'].constructor == Object // true if series headers are provided in data
-    if (!seriesHeaders){
-        for (i in data){
-            var val = data[i]['series']
-            series_dict = {}
-            if (val.length > 1){
-                for (j in val){
-                    series_dict['Serie' + (parseInt(j) + 1)] = val[j]
-                }
-            }
-            else {
-                series_dict['Serie1'] = val 
-            }
-            data[i]['series'] = series_dict
-        }
-    }
-
-    // extract categories, series and values from data
-    let categories = data.map(d => d.category)
-    let series = []
-    let values = []
-    data.forEach(element => {
-        Object.keys(element.series).forEach(key => {
-            if (!series.includes(key)){series.push(key)}
-        })
-        values = values.concat(Object.values(element.series))
-    })
-
-    let series1 = series.slice(0)
-    let values1 = values.slice(0)
-    let series2 = []
-    let values2 = []
-
-    // if secondary Y-axis, split series and values according to corresponging axis
-    if (y2axis){
-        var index = y2axis.serieIndex
-        if (!Array.isArray(index)){index = [index]}
-        index.sort(function(a, b){return a - b})
-        for (let i = index.length-1; i >= 0; i--){
-            if (typeof series[index[i]] != 'undefined'){
-                series1.splice(index[i],1)
-                series2.push(series[index[i]])
-            }
-        }
-        values1 = []
-        series1.forEach(serie => {
-            data.forEach(element => {
-                let val = element.series[serie]
-                if (typeof val !== 'undefined' && val !== ''){
-                    values1.push(element.series[serie])
-                }   
-            })
-        })
-        series2.forEach(serie => {
-            data.forEach(element => {
-                let val = element.series[serie]
-                if (typeof val !== 'undefined' && val !== ''){
-                    values2.push(element.series[serie])
-                }  
-            })
-        })
-    }
-   
-    // enable bootstrap tooltip
-    try {$(function () {$('[data-toggle="tooltip"]').tooltip()})}
-    catch(err) {}
-
-    // create scales
-    let xScale = d3.scalePoint()
-        .range([margin.left, width - margin.right])
-        .domain(categories)
-
-    let yaxisMin = yaxis.min
-    let yaxisMax = yaxis.max
-    if (typeof yaxisMin == 'undefined' || yaxisMin > d3.max(values1, d => +d)) {yaxisMin = d3.min(values1, d => +d) - ((d3.max(values1, d => +d) - d3.min(values1, d => +d)) * 0.1)}
-    if (typeof yaxisMax == 'undefined' || yaxisMax < d3.max(values1, d => +d)) {yaxisMax = d3.max(values1, d => +d) + ((d3.max(values1, d => +d) - d3.min(values1, d => +d)) * 0.1)}
-
-    let y1Scale = d3.scaleLinear()
-        .range([height - margin.bottom, margin.top])
-        .domain([yaxisMin,yaxisMax])
-
-    let y2axisMin = y2axis.min
-    let y2axisMax = y2axis.max
-    if (typeof y2axisMin == 'undefined' || y2axisMin > d3.max(values2, d => +d)) {y2axisMin = d3.min(values2, d => +d) - ((d3.max(values2, d => +d) - d3.min(values2, d => +d)) * 0.1)}
-    if (typeof y2axisMax == 'undefined' || y2axisMax < d3.max(values2, d => +d)) {y2axisMax = d3.max(values2, d => +d) + ((d3.max(values2, d => +d) - d3.min(values2, d => +d)) * 0.1)}
-
-    let y2Scale = d3.scaleLinear()
-        .range([height - margin.bottom, margin.top])
-        .domain([y2axisMin,y2axisMax])
-
-    let colorScale = d3.scaleOrdinal()
-        .domain(series)
-        .range(colors)
-
-    // create Y1-axis
-    if (series1.length > 0){
-        var axisY1 = d3.axisLeft(y1Scale)
-        svg.append('g')
-            .attr('class', 'axisy1')
-            .style('font-size', yaxis.font.size || 12)
-            .attr('transform', `translate(${margin.left},0)`)
-            .call(axisY1)
-    }
-
-    // create Y2-axis
-    if (series2.length > 0){
-        var axisY2 = d3.axisRight(y2Scale)
-        svg.append('g')
-            .attr('class', 'axisy2')
-            .style('font-size', y2axis.font.size || 12)
-            .attr('transform', `translate(${width - margin.right},0)`)
-            .call(axisY2)
-    }
-
-    // create grid
-    if (grid && typeof axisY1 !== 'undefined'){
-        svg.append('g')
-            .attr('class', 'grid')        
-            .attr('transform', `translate(${margin.left},0)`)
-            .call(axisY1
-                .tickSize(-width + margin.left + margin.right, 0, 0)
-                .tickFormat('')
-                )
-
-        svg.select('.grid').selectAll('line')
-            .style('stroke', '#D6D6D6')
-            .style('fill','none')
-
-        svg.select('.grid').selectAll('path')
-            .style('display','none')  //remove upper most grid line 
-    }
-
-    // create X-axis
-    // get tick values based on number of ticks provided as parameter
-    let categoryCount = data.length
-    let gap = Math.round(categoryCount / Math.min(ticks.count,data.length))
-    let tickValues = []
-
-    for (var i = 0; i < categories.length; i++){
-        if ((i+1) % gap == 0){
-            tickValues.push(categories[i])
-        }
-    }
-
-    let axisX = d3.axisBottom(xScale).tickValues(tickValues)
-
-    svg.append('g')
-        .attr('class', 'axisx')
-        .style('font-size', xaxis.font.size || 12)
-        .attr('transform', `translate(0,${height - margin.bottom})`)
-        .call(axisX)
-
-    if (xaxis.orientation == 'vertical'){
-        svg.select('.axisx').selectAll("text")	
-            .style('text-anchor', 'end')
-            .attr('dx', '-1em')
-            .attr('dy', '-0.6em')
-            .attr('transform', 'rotate(-90)')
-    }
-    else if (xaxis.orientation == 'skew'){
-        svg.select('.axisx').selectAll("text")	
-            .style('text-anchor', 'end')
-            .attr('dx', '-1em')
-            .attr('dy', '-0.2em')
-            .attr('transform', 'rotate(-45)')
-    }
-
-    // add lines
-    series1.forEach(serie => {
-        addLine(serie,y1Scale)
-        addCircle(serie,y1Scale)
-        if (tooltip){addTooltips(serie)}
-    })
-    
-    series2.forEach(serie => {
-        addLine(serie,y2Scale)
-        addCircle(serie,y2Scale)
-        if (tooltip){addTooltips(serie)}
-    })
-
-
-    function addLine(serie,yScale){
-        let valueline = d3.line()
-            .x(d => xScale(d.category))
-            .y(d => yScale(d.series[serie]))
-
-        svg.append('g')
-            .attr('class', 'line_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
-            .append("path")
-            .datum(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''}))
-            .attr("d", valueline)
-            .attr('fill', 'none')
-            .style('stroke', colorScale(serie))
-            .style('stroke-width', line.width)
-    }
-
-
-    function addCircle(serie,yScale){
-        svg.append('g')
-            .attr('class', 'dots_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
-            .selectAll('.dot')
-            .data(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''}))
-            .enter()
-            .append('circle') 
-            .attr('class', 'dot')
-            .attr('cx', d => xScale(d.category))
-            .attr('cy', d => yScale(d.series[serie]))
-            .attr('r', circle.radius)
-            .style('fill', colorScale(serie))
-            .style('fill-opacity', circle.display ? '1' : '0')
-            .on('mouseenter', function() { 
-                if (!circle.display){
-                    d3.select(this).style('fill-opacity', 1)
-                }
-                d3.select(this).style('stroke', bordercolor)
-                d3.select(this).style('stroke-width', borderwidth)
-            })
-            .on('mouseleave', function() { 
-                if (!circle.display){
-                    d3.select(this).style('fill-opacity', 0)
-                }
-                d3.select(this).style('stroke', 'none')
-            })
-    }
-
-
-    function addTooltips(serie){
-        svg.selectAll('.dots_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))	
-            .selectAll('.dot')	
-            .attr('data-toggle','tooltip')
-            .attr('data-placement','top')
-            .attr('title', d => (tooltip.prefix || '') + (seriesHeaders ? serie + ': ' : '') + d.series[serie] + (tooltip.suffix || ''))
-    }
-
-
-    // add titles
-    addTitles(svg,width,height,centerX,centerY,margin,title,xlabel,ylabel,y2label)
-
-   // add legend
-   if (legend){
-        addLegend(svg,series,colorScale,legend)
-    }
-
-} 
-
 
 
 // Function for creating legend

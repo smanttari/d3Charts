@@ -29,6 +29,9 @@
         <h4>Line Chart Example</h4>
         <div id="chart_performance_per_month"></div>
 
+        <h4>Combo Chart Example</h4>
+        <div id="chart_combo"></div>
+
         <h4>Pie Chart Example</h4>
         <div id="chart_fruits"></div>
 
@@ -68,6 +71,13 @@
             ]
 
         let data3 = [
+            {"category":"Q1","series":{"A":41, "B": 36, "C":39}},
+            {"category":"Q2","series":{"A":35, "B": 26, "C":37}},
+            {"category":"Q3","series":{"A":44, "B": 33, "C":26}},
+            {"category":"Q4","series":{"A":32, "B": 21, "C":55}}
+            ]
+
+        let data4 = [
             {"category":"Apple","series":75},
             {"category":"Banana","series":56},
             {"category":"Orange","series":38},
@@ -75,13 +85,14 @@
             {"category":"Kiwi","series":14}
         ]
 
-        let data4 = [
+        let data5 = [
             {"Year":2017,"A":29.0,"B":23.0,"C":17.0,"D":20.0},
             {"Year":2018,"A":23.0,"B":26.0,"C":19.0,"D":17.0},
             {"Year":2019,"A":24.0,"B":21.0,"C":21.0,"D":10.0}
             ]
 
         let options1 = {
+            type: 'bar',
             fontFamily: 'Helvetica',
             title: {label: 'Amount Per Year', size: 14, fontWeight: 'bold'},
             xlabel: {label: 'Year', size: 12},
@@ -102,6 +113,7 @@
         }
 
         let options2 = {
+            type: 'line',
             fontFamily: 'Helvetica',
             title: {label: 'Title', size: 14, fontWeight: 'bold'},
             ylabel: {label: 'revenue', size: 12},
@@ -121,6 +133,26 @@
             }
 
         let options3 = {
+            type: 'bar',
+            serietype: {0:'line'},
+            fontFamily: 'Helvetica',
+            width: 700,
+            height: 400,
+            barlabel: {size:10, color:'#fff'},
+            padding: 0.2,
+            margin: {top: 40, bottom: 100, left: 60, right: 150},
+            xaxis: {font: {size: 10}, orientation: 'skew'},
+            yaxis: {font: {size: 10}, min:0},
+            colors: ['#4BA6FF','#969efc','#c995ed'],
+            grid: true,
+            tooltip: true,
+            circle: {radius: 4, display: true},
+            line: {width: 2},
+            legend: {coord: {x: 620, y: 50}, font: {size: 12}},
+            responsiveness: true
+            }
+
+        let options4 = {
             fontFamily: 'Helvetica',
             title: {label: 'Fruits', size: 14, fontWeight: 'bold'},
             width: 600,
@@ -134,7 +166,7 @@
             responsiveness: true
             }
       
-        let options4 = {
+        let options5 = {
             width: 500,
             border: true,
             padding: '6px',
@@ -147,12 +179,13 @@
         }
 
         // draw charts
-        drawBarChart(div='chart_amount_per_year', dataset=data1, opt=options1)
-        drawLineChart(div='chart_performance_per_month', dataset=data2, opt=options2)
-        drawPieChart(div='chart_fruits', dataset=data3, opt=options3)
+        drawComboChart(div='chart_amount_per_year', dataset=data1, opt=options1)
+        drawComboChart(div='chart_performance_per_month', dataset=data2, opt=options2)
+        drawComboChart(div='chart_combo', dataset=data3, opt=options3)
+        drawPieChart(div='chart_fruits', dataset=data4, opt=options4)
 
         // create table
-        createTable(div='table', data=data4, opt=options4)
+        createTable(div='table', data=data5, opt=options5)
 
 
     </script>

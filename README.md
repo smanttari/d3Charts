@@ -24,6 +24,16 @@ Initialize your data into following format
 
 ```
 let data = [
+    {"category":"category1","series":[71,46]},
+    {"category":"category2","series":[65,49]},
+    {"category":"category3","series":[54,53]}
+    ]
+```
+
+Serie headers can be added as follows
+
+```
+let data = [
     {"category":"category1","series":{"serie1":71, "serie2": 46}},
     {"category":"category2","series":{"serie1":65, "serie2": 49}},
     {"category":"category3","series":{"serie1":54, "serie2": 53}}
@@ -36,15 +46,14 @@ Call appropriate javascript function for drawing the chart
 
 | Function | Description | 
 | -------- | ----------- | 
-| drawBarChart | Bar chart | 
-| drawLineChart | Line chart | 
+| drawComboChart | Bar and/or line chart | 
 | drawPieChart | Pie chart | 
 
 
 For example:
 
 ```
-drawBarChart(div = <id of your div>, data = data, opt = {})
+drawComboChart(div = <id of your div>, data = data, opt = {})
 ```
 
 ### Customization
@@ -55,33 +64,35 @@ List of all possible parameters that can be defined
 
 | Parameter | Description | Example | Default | Applies to |
 | ------- | -------- | -------- | -------- | -------- |
-| animation | Animation settings | `{duration: 500, delay: 20}` | `false` | BarChart |
-| avgLine | Show average line with options | `{size:10, color: '#DC3545', prefix: "ka ", suffix:"h"}` | `false` | BarChart |
-| barlabel | Options for bar labels | `{size:10, color:'#fff'}` | `false` | BarChart |
-| circle | Show/Hide circles in line |  | `{radius: 4, display: false}` | LineChart |
+| animation | Animation settings | `{duration: 500, delay: 20}` | `false` | ComboChart |
+| avgLine | Show average line with options | `{size:10, color: '#DC3545', prefix: "ka ", suffix:"h"}` | `false` | ComboChart |
+| barlabel | Options for bar labels | `{size:10, color:'#fff'}` | `false` | ComboChart |
+| circle | Show/Hide circles in line |  | `{radius: 4, display: false}` | ComboChart |
 | colors | List of colors for each serie | `['#4BA6FF','#0bef41']` | [d3.schemeCategory10](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeCategory10) | All |
 | fontFamily | Font style |  | `Helvetica` | All |
-| grid | Show/Hide grid | `true/false` | `false` | BarChart, LineChart |
+| grid | Show/Hide grid | `true/false` | `false` | ComboChart |
 | height | Height of the element |  | `300` | All |
 | legend | Show legend with options | `{coord: {x: 620, y: 50}, rect: {size: 10, space: 5}, font: {size: 12}}` | `false` | All |
-| line | Options for line |  | `{width: 2}` | LineChart |
+| line | Options for line |  | `{width: 2}` | ComboChart |
 | margin | Dict of marginals |  | `{top: 50, bottom: 50, left: 50, right: 50}` | All |
 | maxSliceCount | Maximum number of slices |  | `20` | PieChart |
-| padding | Padding between bars |  | `0.1` | BarChart |
+| padding | Padding between bars |  | `0.1` | ComboChart |
 | radius | Pie chart radius | `{inner: 20, outer: 100` | `{inner: 0, outer: (height - margin.top - margin.bottom) / 2}` | PieChart |
 | responsiveness | Boolean for applying responsive behaviour | `true/false`  | `false` | All |
+| serietype | Dictionary of serie types if different than defined in 'type'-parameter | `{1:'line', 4:'line'}`  | - | ComboChart |
 | slicelabel | Show/Hide slice labels | `true/false` | `{size:10, color:'#fff', threshold: 0.10}`| PieChart |
-| ticks | Number of x-axis ticks | `ticks: {count:5}` | Data length | BarChart, LineChart |
+| ticks | Number of x-axis ticks | `ticks: {count:5}` | Data length | ComboChart |
 | title | Main title of the chart |  | - | All |
 | tooltip | Show tooltips. Requires Bootstrap. | `true/false` | `false` | All |
-| traceDiff | Possibility to track percent differences between bars | `{size:10, color:'black'}` | `false` | BarChart |
+| traceDiff | Possibility to track percent differences between bars | `{size:10, color:'black'}` | `false` | ComboChart |
+| type | The main type of chart | `bar/line` | `bar` | ComboChart |
 | width | Width of the element |  | `500` | All |
-| xaxis | X-axis options | `{font: {size: 12}, orientation: 'vertical/skew/horizontal'}` | `{font: {size: 10}, orientation: 'horizontal'}` | BarChart, LineChart |
-| xlabel | X-axis label options | `{label:'Year', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
-| yaxis | Y-axis options |  | `{font: {size: 10}, min:10, max:200}` | BarChart, LineChart |
-| y2axis | Secondary Y-axis options. serieIndex list the serie indexes that applies to secondary axis | `{serieIndex:[1,2] , font: {size: 10}, min:10, max:200}` | `false` | BarChart, LineChart |
-| ylabel | Y-axis label options | `{label:'Amount', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
-| y2label | Secondary Y-axis label options | `{label:'Costs', size:12, fontWeight: 'normal'}` | - | BarChart, LineChart |
+| xaxis | X-axis options | `{font: {size: 12}, orientation: 'vertical/skew/horizontal'}` | `{font: {size: 10}, orientation: 'horizontal'}` | ComboChart |
+| xlabel | X-axis label options | `{label:'Year', size:12, fontWeight: 'normal'}` | - | ComboChart |
+| yaxis | Y-axis options |  | `{font: {size: 10}, min:10, max:200}` | ComboChart |
+| y2axis | Secondary Y-axis options. serieIndex list the serie indexes that applies to secondary axis | `{serieIndex:[1,2] , font: {size: 10}, min:10, max:200}` | `false` | ComboChart |
+| ylabel | Y-axis label options | `{label:'Amount', size:12, fontWeight: 'normal'}` | - | ComboChart |
+| y2label | Secondary Y-axis label options | `{label:'Costs', size:12, fontWeight: 'normal'}` | - | ComboChart |
 
 
 ## Examples
@@ -93,6 +104,10 @@ List of all possible parameters that can be defined
 ### Line Chart
 
 ![LineChart](./img/LineChart.PNG)
+
+### Combo Chart
+
+![ComboChart](./img/ComboChart.png)
 
 ### Pie Chart
 
