@@ -73,7 +73,7 @@ List of all possible parameters that can be defined
 | grid | Show/Hide grid | `true/false` | `false` | ComboChart |
 | height | Height of the element |  | `300` | All |
 | legend | Show legend with options | `{coord: {x: 620, y: 50}, rect: {size: 10, space: 5}, font: {size: 12}}` | `false` | All |
-| line | Options for line |  | `{width: 2}` | ComboChart |
+| line | Options for line |  | `{width: 2, labels:{size:12, color:'#000'}}` | ComboChart |
 | margin | Dict of marginals |  | `{top: 50, bottom: 50, left: 50, right: 50}` | All |
 | maxSliceCount | Maximum number of slices |  | `20` | PieChart |
 | padding | Padding between bars |  | `0.1` | ComboChart |

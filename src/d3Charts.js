@@ -11,7 +11,7 @@ function drawComboChart(div,dataset,opt){
     let grid = options.grid || false 
     let height = options.height || 300
     let legend = options.legend || false
-    let line = options.line || {width: 2}
+    let line = options.line || {width: 2, labels: false}
     let margin = options.margin || {top: 50, bottom: 50, left: 50, right: 50}
     let padding = options.padding || 0.1
     let responsiveness = options.responsiveness || false
@@ -265,16 +265,14 @@ function drawComboChart(div,dataset,opt){
     series1.filter(d => types[d] == 'line').forEach(serie => {
         addLine(serie,y1Scale)
         addCircle(serie,y1Scale)
-        if (tooltip){
-            addTooltips(serie)
-        }
+        if (line.labels){addLinelabels(serie,y1Scale)}
+        if (tooltip){addTooltips(serie)}
     })
     series2.filter(d => types[d] == 'line').forEach(serie => {
         addLine(serie,y2Scale)
         addCircle(serie,y2Scale)
-        if (tooltip){
-            addTooltips(serie)
-        }
+        if (line.labels){addLinelabels(serie,y2Scale)}
+        if (tooltip){addTooltips(serie)}
     })
 
     // add titles
@@ -377,7 +375,7 @@ function drawComboChart(div,dataset,opt){
             .attr('dy', '2em')
             .attr('text-anchor', 'middle')
             .text(d => {return (!barlabel || d.series[serie] == 0) ? '' : d.series[serie]})
-            .style('font-size', barlabel.size)
+            .style('font-size', barlabel.size || 10)
             .style('fill', barlabel.color)
             .style('opacity', animation ? '0' : '1')
 
@@ -402,7 +400,24 @@ function drawComboChart(div,dataset,opt){
             .attr("d", valueline)
             .attr('fill', 'none')
             .style('stroke', colorScale(serie))
-            .style('stroke-width', line.width)
+            .style('stroke-width', line.width || 2)
+    }
+
+    function addLinelabels(serie,yScale){
+        svg.append('g')
+            .attr('class','linelabels_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
+            .selectAll('.linelabel')  		
+            .data(data.filter((d,i) => {return typeof d.series[serie] !== 'undefined' && d.series[serie] !== ''}))
+            .enter()
+            .append('text')
+            .attr('class','linelabel')
+            .attr('x', d => categoryScale(d.category) + categoryScale.bandwidth() / 2 )
+            .attr('y', d => yScale(d.series[serie]))
+            .attr('dy', '-1em')
+            .attr('text-anchor', 'middle')
+            .text(d => d.series[serie])
+            .style('font-size', line.labels.size || 10)
+            .style('fill', line.labels.color)
     }
 
     function addCircle(serie,yScale){
