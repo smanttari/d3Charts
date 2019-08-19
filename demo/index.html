@@ -47,16 +47,16 @@
     <script type="text/javascript">
 
         let data1 = [
-            {"category":"2010","series":60},
-            {"category":"2011","series":27},
-            {"category":"2012","series":32},
-            {"category":"2013","series":50},
-            {"category":"2014","series":47},
-            {"category":"2015","series":54},
-            {"category":"2016","series":66},
-            {"category":"2017","series":96},
-            {"category":"2018","series":89},
-            {"category":"2019","series":79}
+            {"category":"2010","series":6000},
+            {"category":"2011","series":2700},
+            {"category":"2012","series":3200},
+            {"category":"2013","series":5000},
+            {"category":"2014","series":4700},
+            {"category":"2015","series":5400},
+            {"category":"2016","series":6600},
+            {"category":"2017","series":9600},
+            {"category":"2018","series":8900},
+            {"category":"2019","series":7900}
             ]
 
         let data2 = [
@@ -110,12 +110,12 @@
             title: {label: 'Amount Per Year', size: 14, fontWeight: 'bold'},
             xlabel: {label: 'Year', size: 12},
             ylabel: {label: 'Amount', size: 12},
-            bar: {labels:{size:10, color:'#fff'}},
-            width: 600,
+            bar: {labels:{size:8, color:'#fff'}},
+            width: 650,
             height: 350,
-            margin: {top: 40, bottom: 100, left: 50, right: 150},
+            margin: {top: 40, bottom: 100, left: 70, right: 150},
             xaxis: {font: {size:10}, orientation: 'horizontal'},
-            yaxis: {font: {size:10}, min:0},
+            yaxis: {font: {size:10}, min:0, format:',.0f'},
             colors: ['#4BA6FF'],
             padding: 0.1,
             grid: true,
@@ -135,12 +135,12 @@
             height: 400,
             margin: {top: 40, bottom: 100, left: 60, right: 150},
             xaxis: {font: {size: 10}, orientation: 'skew'},
-            yaxis: {font: {size: 10}},
-            y2axis: {font: {size: 10}, serieIndex: [1]},
+            yaxis: {font: {size: 10}, format:'$'},
+            y2axis: {font: {size: 10}, serieIndex: [1], format:'$'},
             colors: ['#4BA6FF','#0bef41'],
             grid: true,
             tooltip: true,
-            line: {width:2},
+            line: {width:2, labels: true},
             circle: {radius: 4, display: true},
             legend: {coord: {x: 620, y: 50}, font: {size: 12}},
             responsiveness: true
@@ -196,7 +196,7 @@
             type: 'line',
             fontFamily: 'Helvetica',
             width: 700,
-            height: 400,
+            height: 300,
             margin: {top: 40, bottom: 100, left: 60, right: 150},
             xaxis: {font: {size: 10}, orientation: 'skew', format:'%Y-%m-%d', date:true},
             yaxis: {font: {size: 10}},

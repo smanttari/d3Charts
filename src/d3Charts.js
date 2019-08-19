@@ -1,3 +1,13 @@
+var localeFI = {
+    "decimal": ",",
+    "thousands": "\u00a0",
+    "grouping": [3],
+    "currency": ["", "\u00a0€"]
+  }
+
+var FI = d3.formatLocale(localeFI)
+
+
 function drawComboChart(div,dataset,opt){
 
     // set default values
@@ -23,7 +33,7 @@ function drawComboChart(div,dataset,opt){
     let width = options.width || 500
     let xaxis = options.xaxis || {font: {size: 10}, orientation: 'horizontal', format: false, tickCount: (dataset) ? dataset.length : 0, date:false}
     let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
-    let yaxis = options.yaxis || {font: {size: 10}}
+    let yaxis = options.yaxis || {font: {size: 10}, format: false}
     let ylabel = options.ylabel || {label:'', size:10, fontWeight: 'normal'}
     let y2axis = options.y2axis || false
     let y2label = options.y2label || {label:'', size:10, fontWeight: 'normal'}
@@ -190,6 +200,7 @@ function drawComboChart(div,dataset,opt){
     // create Y1-axis
     if (series1.length > 0){
         var axisY1 = d3.axisLeft(y1Scale)
+        axisY1.tickFormat(FI.format(yaxis.format || ''))
         svg.append('g')
             .attr('class', 'axisy1')
             .style('font-size', yaxis.font.size || 12)
@@ -200,6 +211,7 @@ function drawComboChart(div,dataset,opt){
     // create Y2-axis
     if (series2.length > 0){
         var axisY2 = d3.axisRight(y2Scale)
+        axisY2.tickFormat(FI.format(yaxis.format || ''))
         svg.append('g')
             .attr('class', 'axisy2')
             .style('font-size', y2axis.font.size || 12)
@@ -239,7 +251,7 @@ function drawComboChart(div,dataset,opt){
 
     if (xaxis.format){
         if (xaxis.date){axisX.tickFormat(d3.timeFormat(xaxis.format))}
-        else {axisX.tickFormat(d3.format(xaxis.format))}
+        else {axisX.tickFormat(FI.format(xaxis.format))}
     }
 
     svg.append('g')

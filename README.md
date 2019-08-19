@@ -88,8 +88,8 @@ List of all possible parameters that can be defined
 | width | Width of the element |  | `500` | All |
 | xaxis | X-axis options | `{font: {size: 12}, orientation: 'vertical/skew/horizontal', ticksCount: 10, format:'%Y-%m-%d', date:true/false}` | `{font: {size: 10}, orientation: 'horizontal', date:false}` | ComboChart (dates works only with line-chart) |
 | xlabel | X-axis label options | `{label:'Year', size:12, fontWeight: 'normal'}` | - | ComboChart |
-| yaxis | Y-axis options |  | `{font: {size: 10}, min:10, max:200}` | ComboChart |
-| y2axis | Secondary Y-axis options. serieIndex list the serie indexes that applies to secondary axis | `{serieIndex:[1,2] , font: {size: 10}, min:10, max:200}` | `false` | ComboChart |
+| yaxis | Y-axis options | `{font: {size: 10}, min:10, max:200, format:',.2f'}` | `{font: {size: 10},format:false}` | ComboChart |
+| y2axis | Secondary Y-axis options. serieIndex list the serie indexes that applies to secondary axis | `{serieIndex:[1,2], font: {size: 10}, min:10, max:200, format:'$'}` | `false` | ComboChart |
 | ylabel | Y-axis label options | `{label:'Amount', size:12, fontWeight: 'normal'}` | - | ComboChart |
 | y2label | Secondary Y-axis label options | `{label:'Costs', size:12, fontWeight: 'normal'}` | - | ComboChart |
 
