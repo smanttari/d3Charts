@@ -4,7 +4,7 @@ function drawComboChart(div,dataset,opt){
     let options = opt || {} 
     let animation = options.animation || false
     let avgLine = options.avgLine || false
-    let barlabel = options.barlabel || false
+    let bar = options.bar || {labels: false}
     let circle = options.circle || {radius: 4, display: false}
     let colors = options.colors || d3.schemeCategory10 
     let fontFamily = options.fontFamily || 'Helvetica'
@@ -346,9 +346,9 @@ function drawComboChart(div,dataset,opt){
             series.forEach(serie => {
                 svg.select('.barlabels_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
                     .selectAll('.barlabel')
-                    .text(d => {return (!barlabel || d.series[serie] == 0) ? '' : d.series[serie]})
-                    .style('font-size', barlabel.size)
-                    .style('fill', barlabel.color)
+                    .text(d => {return (!bar.labels || d.series[serie] == 0) ? '' : d.series[serie]})
+                    .style('font-size', bar.labels ? bar.labels.size : 10)
+                    .style('fill', bar.labels ? bar.labels.color : '#000')
             })
     })
 
@@ -392,9 +392,9 @@ function drawComboChart(div,dataset,opt){
             .attr('y', d => yScale(d.series[serie]))
             .attr('dy', '2em')
             .attr('text-anchor', 'middle')
-            .text(d => {return (!barlabel || d.series[serie] == 0) ? '' : d.series[serie]})
-            .style('font-size', barlabel.size || 10)
-            .style('fill', barlabel.color)
+            .text(d => {return (!bar.labels || d.series[serie] == 0) ? '' : d.series[serie]})
+            .style('font-size', bar.labels ? bar.labels.size : 10)
+            .style('fill', bar.labels ? bar.labels.color : '#000')
             .style('opacity', animation ? '0' : '1')
 
         if (animation) {

@@ -66,7 +66,7 @@ List of all possible parameters that can be defined
 | ------- | -------- | -------- | -------- | -------- |
 | animation | Animation settings | `{duration: 500, delay: 20}` | `false` | ComboChart |
 | avgLine | Show average line with options | `{size:10, color: '#DC3545', prefix: "ka ", suffix:"h"}` | `false` | ComboChart |
-| barlabel | Options for bar labels | `{size:10, color:'#fff'}` | `false` | ComboChart |
+| bar | Options for bar | `{labels:{size:10, color:'#fff'}}` | `{labels: false}` | ComboChart |
 | circle | Show/Hide circles in line |  | `{radius: 4, display: false}` | ComboChart |
 | colors | List of colors for each serie | `['#4BA6FF','#0bef41']` | [d3.schemeCategory10](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeCategory10) | All |
 | fontFamily | Font style |  | `Helvetica` | All |
