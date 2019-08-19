@@ -81,13 +81,12 @@ List of all possible parameters that can be defined
 | responsiveness | Boolean for applying responsive behaviour | `true/false`  | `false` | All |
 | serietype | Dictionary of serie types if different than defined in 'type'-parameter | `{1:'line', 4:'line'}`  | - | ComboChart |
 | slicelabel | Show/Hide slice labels | `true/false` | `{size:10, color:'#fff', threshold: 0.10}`| PieChart |
-| ticks | Number of x-axis ticks | `ticks: {count:5}` | Data length | ComboChart |
 | title | Main title of the chart |  | - | All |
 | tooltip | Show tooltips. Requires Bootstrap. | `true/false` | `false` | All |
 | traceDiff | Possibility to track percent differences between bars | `{size:10, color:'black'}` | `false` | ComboChart |
 | type | The main type of chart | `bar/line` | `bar` | ComboChart |
 | width | Width of the element |  | `500` | All |
-| xaxis | X-axis options | `{font: {size: 12}, orientation: 'vertical/skew/horizontal'}` | `{font: {size: 10}, orientation: 'horizontal'}` | ComboChart |
+| xaxis | X-axis options | `{font: {size: 12}, orientation: 'vertical/skew/horizontal', ticksCount: 10, format:'%Y-%m-%d', date:true/false}` | `{font: {size: 10}, orientation: 'horizontal', date:false}` | ComboChart (dates works only with line-chart) |
 | xlabel | X-axis label options | `{label:'Year', size:12, fontWeight: 'normal'}` | - | ComboChart |
 | yaxis | Y-axis options |  | `{font: {size: 10}, min:10, max:200}` | ComboChart |
 | y2axis | Secondary Y-axis options. serieIndex list the serie indexes that applies to secondary axis | `{serieIndex:[1,2] , font: {size: 10}, min:10, max:200}` | `false` | ComboChart |

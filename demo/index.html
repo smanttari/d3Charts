@@ -32,6 +32,9 @@
         <h4>Combo Chart Example</h4>
         <div id="chart_combo"></div>
 
+        <h4>Time Serie Example</h4>
+        <div id="chart_time_serie"></div>
+
         <h4>Pie Chart Example</h4>
         <div id="chart_fruits"></div>
 
@@ -89,6 +92,16 @@
             {"Year":2017,"A":29.0,"B":23.0,"C":17.0,"D":20.0},
             {"Year":2018,"A":23.0,"B":26.0,"C":19.0,"D":17.0},
             {"Year":2019,"A":24.0,"B":21.0,"C":21.0,"D":10.0}
+            ]
+
+        let data6 = [
+            {"category":"2010-12-31","series":49},
+            {"category":"2011-12-31","series":47},
+            {"category":"2015-06-30","series":52},
+            {"category":"2012-12-31","series":44},
+            {"category":"2020-06-30","series":48},
+            {"category":"2014-08-31","series":47},
+            {"category":"2016-12-31","series":46}
             ]
 
         let options1 = {
@@ -179,11 +192,29 @@
             footer: {color:'#000', backgroudColor:'#e9ecef', columns: {1: 'sum', 2: 'sum', 3:'sum', 4:'sum'}}
         }
 
+        let options6 = {
+            type: 'line',
+            fontFamily: 'Helvetica',
+            width: 700,
+            height: 400,
+            margin: {top: 40, bottom: 100, left: 60, right: 150},
+            xaxis: {font: {size: 10}, orientation: 'skew', format:'%Y-%m-%d', date:true},
+            yaxis: {font: {size: 10}},
+            y2axis: {font: {size: 10}, serieIndex: [1]},
+            colors: ['#4BA6FF'],
+            grid: true,
+            tooltip: true,
+            line: {width:2, labels:{'size':10}},
+            circle: {radius: 4, display: true},
+            responsiveness: true
+            }
+
         // draw charts
         drawComboChart(div='chart_amount_per_year', dataset=data1, opt=options1)
         drawComboChart(div='chart_performance_per_month', dataset=data2, opt=options2)
         drawComboChart(div='chart_combo', dataset=data3, opt=options3)
         drawPieChart(div='chart_fruits', dataset=data4, opt=options4)
+        drawComboChart(div='chart_time_serie', dataset=data6, opt=options6)
 
         // create table
         createTable(div='table', data=data5, opt=options5)
