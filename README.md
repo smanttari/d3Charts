@@ -75,6 +75,7 @@ List of all possible parameters that can be defined
 | legend | Show legend with options | `{coord: {x: 620, y: 50}, rect: {size: 10, space: 5}, font: {size: 12}}` | `false` | All |
 | line | Options for line |  | `{width: 2, labels:{size:12, color:'#000'}}` | ComboChart |
 | margin | Dict of marginals |  | `{top: 50, bottom: 50, left: 50, right: 50}` | All |
+| movingAvg | Show moving average | `{windowSize:7, color: '#fd397a'}` |  `false` | ComboChart |
 | maxSliceCount | Maximum number of slices |  | `20` | PieChart |
 | padding | Padding between bars |  | `0.1` | ComboChart |
 | radius | Pie chart radius | `{inner: 20, outer: 100` | `{inner: 0, outer: (height - margin.top - margin.bottom) / 2}` | PieChart |

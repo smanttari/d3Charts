@@ -23,6 +23,7 @@ function drawComboChart(div,dataset,opt){
     let legend = options.legend || false
     let line = options.line || {width: 2, labels: false}
     let margin = options.margin || {top: 50, bottom: 50, left: 50, right: 50}
+    let movingAvg = options.movingAvg || false
     let padding = options.padding || 0.1
     let responsiveness = options.responsiveness || false
     let serietype = options.serietype || false
@@ -319,6 +320,12 @@ function drawComboChart(div,dataset,opt){
         if (y2axis){addAvgLine(values2,y2Scale)} 
     }
 
+    // add moving average
+    if (movingAvg){
+        series1.forEach(serie => {addMovingAvg(serie,y1Scale)})
+        if (y2axis) {series2.forEach(serie => {addMovingAvg(serie,y2Scale)})}
+    }
+
     // add mouseenter and mouseleave actions to bars
     svg.selectAll('rect')
         .on('mouseenter', function() { 
@@ -432,10 +439,7 @@ function drawComboChart(div,dataset,opt){
 
     function addLine(serie,yScale){
         let valueline = d3.line()
-            .x(d => {
-                if (xaxis.date) {return xScale(new Date(d.category))}
-                else {return xScale(d.category) + xScale.bandwidth() / 2}
-            })
+            .x(d => {return xaxis.date ? xScale(new Date(d.category)) : xScale(d.category) + xScale.bandwidth()/2})
             .y(d => yScale(d.series[serie]))
 
         svg.append('g')
@@ -456,10 +460,7 @@ function drawComboChart(div,dataset,opt){
             .enter()
             .append('text')
             .attr('class','linelabel')
-            .attr('x', d => {
-                if (xaxis.date) {return xScale(new Date(d.category))}
-                else {return xScale(d.category) + xScale.bandwidth() / 2}
-            })
+            .attr('x', d => {return xaxis.date ? xScale(new Date(d.category)) : xScale(d.category) + xScale.bandwidth()/2})
             .attr('y', d => yScale(d.series[serie]))
             .attr('dy', '-1em')
             .attr('text-anchor', 'middle')
@@ -547,6 +548,33 @@ function drawComboChart(div,dataset,opt){
             avg.select('text')
                 .transition()
                 .duration(animation.duration * 2|| 1000)
+                .style('opacity', '1')
+        }
+    }
+
+    function addMovingAvg(serie,yScale){
+        let values = data.map(d => d.series[serie])
+        let avgValues = movAvg(values, movingAvg.windowSize || 10)
+        let avgData = data.map((d,i) => {return {'category': d.category, 'movAvg': avgValues[i]}})
+        let line = d3.line()
+            .x(d => {return xaxis.date ? xScale(new Date(d.category)) : xScale(d.category) + xScale.bandwidth()/2})
+            .y(d => yScale(d.movAvg))
+
+        svg.append('g')
+            .attr('class', 'movAvg_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
+            .append('path')
+            .datum(avgData.filter((d) => {return !isNaN(d.movAvg)}))
+            .attr('d', line)
+            .attr('fill', 'none')
+            .style('stroke', movingAvg.color || '#DC3545')
+            .style('stroke-width', line.width || 2)
+            .style('opacity', animation ? '0' : '1')
+
+        if (animation){
+            svg.selectAll('.movAvg_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
+                .select('path')
+                .transition()
+                .duration(animation.duration * 2 || 1000)
                 .style('opacity', '1')
         }
     }
@@ -826,4 +854,26 @@ function addTitles(svg,width,height,centerX,centerY,margin,title,xlabel,ylabel,y
         .style('font-size',y2label.size)
         .style('font-weight', y2label.fontWeight)
         .attr('fill', y2label.color)
+}
+
+
+function movAvg(values, windowSize){
+	movingSum = values.map(function(each, index, array) {
+		let start = index - windowSize + 1
+		let subSet, sum
+		if (start < 0) {
+            return undefined
+        }
+        else {
+            subSet = array.slice(start, index + 1)
+            if (subSet.includes('')){
+                return undefined
+            }
+            else {
+                sum = subSet.reduce((acc,item) => { return acc + item })
+                return sum
+            }
+		}
+	})
+	return movingSum.map((s) => {return s/windowSize})
 }
