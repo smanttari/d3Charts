@@ -8,15 +8,17 @@ See [demo](./demo/index.html) page for examples.
 
 ### Dependencies
 
-Requires [d3.js](https://d3js.org/) at least version 4. Copy [src](/src/.) to your project and include following references to your page
+Requires [d3.js](https://d3js.org/) at least version 4. 
+
+Copy [src](/src/.) to your project and include following references to your page
 
 ```
-<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="./src/d3Charts.js"></script>
 <script src="./src/d3Table.js"></script>
 ```
 
-**Note!** Currently displaying tooltips requires also that [Bootstrap](https://getbootstrap.com/docs/4.3/getting-started/introduction/) is installed. Except that works just fine without Bootstrap.
+**Note!** Currently displaying tooltips requires also that [Bootstrap](https://getbootstrap.com/docs/4.3/getting-started/introduction/) is installed.
 
 ### Data
 
