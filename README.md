@@ -84,6 +84,7 @@ List of all possible parameters that can be defined
 | responsiveness | Boolean for applying responsive behaviour | `true/false`  | `false` | All |
 | serietype | Dictionary of serie types if different than defined in 'type'-parameter | `{1:'line', 4:'line'}`  | - | ComboChart |
 | slicelabel | Show/Hide slice labels | `true/false` | `{size:10, color:'#fff', threshold: 0.10}`| PieChart |
+| stacked | Stacked bars | `true/false` | - | ComboChart |
 | title | Main title of the chart |  | - | All |
 | tooltip | Show tooltips. Requires Bootstrap. | `true/false` | `false` | All |
 | traceDiff | Possibility to track percent differences between bars | `{size:10, color:'black'}` | `false` | ComboChart |

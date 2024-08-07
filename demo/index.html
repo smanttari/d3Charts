@@ -32,6 +32,9 @@
         <h4>Combo Chart Example</h4>
         <div id="chart_combo"></div>
 
+        <h4>Stacked Bar Chart Example</h4>
+        <div id="chart_stacked"></div>
+
         <h4>Time Serie Example</h4>
         <div id="chart_time_serie"></div>
 
@@ -209,10 +212,28 @@
             responsiveness: true
             }
 
+        let options7 = {
+            type: 'bar',
+            stacked: true,
+            fontFamily: 'Helvetica',
+            width: 650,
+            height: 350,
+            margin: {top: 40, bottom: 100, left: 60, right: 150},
+            xaxis: {font: {size:10}, orientation: 'horizontal'},
+            yaxis: {font: {size:10}, min:0, format:',.0f'},
+            colors: ['#4BA6FF','#0bef41','#c040ed'],
+            padding: 0.5,
+            grid: true,
+            tooltip: {suffix:" CNT"},
+            legend: {coord: {x: 580, y: 50}, font: {size: 12}},
+            responsiveness: true
+        }
+
         // draw charts
         drawComboChart(div='chart_amount_per_year', dataset=data1, opt=options1)
         drawComboChart(div='chart_performance_per_month', dataset=data2, opt=options2)
         drawComboChart(div='chart_combo', dataset=data3, opt=options3)
+        drawComboChart(div='chart_stacked', dataset=data3, opt=options7)
         drawPieChart(div='chart_fruits', dataset=data4, opt=options4)
         drawComboChart(div='chart_time_serie', dataset=data6, opt=options6)
 
