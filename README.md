@@ -18,7 +18,7 @@ Copy [src](/src/.) to your project and include following references to your page
 <script src="./src/d3Table.js"></script>
 ```
 
-**Note!** Currently displaying tooltips requires also that [Bootstrap](https://getbootstrap.com/docs/4.3/getting-started/introduction/) is installed.
+**Note!** Currently displaying tooltips requires also that [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/introduction/) is installed.
 
 ### Data
 
